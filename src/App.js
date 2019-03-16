@@ -3,6 +3,9 @@ import './App.css';
 
 import mapData from './data/map.json'
 import total from './data/total.json'
+import movingAvg from './data/movingAvg.json'
+
+import { timeParse, timeFormat } from 'd3-time-format';
 
 import Map from './components/Map/Map'
 import LineChart from './components/LineChart/LineChart'
@@ -34,13 +37,27 @@ class App extends Component {
       });
     }
 
+    formatData(raw){
+      const parseTime = timeParse('%Y/%m/%d'),
+            formatTime = timeFormat('%B %Y')
+      raw.forEach(d => {
+          d.xValue = parseTime(d.month)
+          d.date = formatTime(d.xValue)
+          d.yValue = +d.movingAvg
+      })
+      return raw
+    }
+
 
   render() {
     const { height, width } = this.state
 
+    this.formatData(movingAvg)
+
+    //console.log(movingAvg)
 
     return (
-      <div className="App" ref={parent => (this.container = parent)}>
+      <div className="App" >
         <div className="header-section">
 
         </div>
@@ -53,12 +70,15 @@ class App extends Component {
             height = {400}
           />
         </div>
-        <div className="linechart-section">
+        <div className="linechart-section" ref={parent => (this.container = parent)}>
           <LineChart
-            data = {total}
+            data = {movingAvg}
             chartClass = {'linechart'}
             width = {width}
             height = {height}
+            highlight = {19154}
+            xKey = {'xValue'}
+            yKey = {'yValue'}
           />
         </div>
         <div className='credit-section'>
