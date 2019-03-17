@@ -18,18 +18,26 @@ class Map extends Component {
 
   }
 
+  componentDidUpdate(prevProps){
+
+        if(prevProps.highlightHover !== this.props.highlightHover){
+          this.updateData()
+        }
+
+  }
+
   initVis(){
 
     const svg = select(this.node),
           { height, width, margin, chartClass} = this.props,
-          { data, mapData } = this.props,
+          { data, mapData, highlight, highlightHover } = this.props,
           { chartWidth, chartHeight } = updateSvg( svg, height, width, margin ),
           projection = geoAlbers().scale([70000]).translate([-19580, 3910])
 
     appendArea(svg, `${chartClass}-chart-area`, margin.left, margin.top)
 
     this.chartArea = select(`.${chartClass}-chart-area`)
-    
+
     const  mapPath = geoPath().projection(projection)
 
     this.chartArea.selectAll('.map-path')
@@ -38,13 +46,19 @@ class Map extends Component {
           .append('path')
           .attr('class', 'map-path')
           .attr('d', mapPath)
-          .attr('fill', 'steelblue')
+          .attr('fill', '#ccc')
+          .attr('stroke-width', 1)
+          .attr('stroke', (d,i) => +mapData.features[i].properties['CODE'] === highlight ||  +mapData.features[i].properties['CODE'] === highlightHover ? 'steelblue' :  'none')
+          .on('mouseover', (d,i) => console.log(mapData.features[i].properties['CODE']))
 
+  }
 
+  updateData(){
 
+      const { highlightHover, highlight, mapData } = this.props
 
-
-
+      this.chartArea.selectAll('.map-path')
+            .attr('stroke', (d,i) => +mapData.features[i].properties['CODE'] === highlight ||  +mapData.features[i].properties['CODE'] === highlightHover ? 'steelblue' :  'none')
 
   }
 

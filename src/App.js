@@ -17,17 +17,35 @@ class App extends Component {
         super(props)
         this.state = {
               width: 20000,
-              height: undefined
+              height: undefined,
+              highlight: 19154,
+              highlightHover: 19144
         }
 
       this.handleResize = this.handleResize.bind(this)
     }
 
-    componentDidMount(){
+    handleMouseoverLine = (d,i) => {
+      let copy = {...this.state}
+          copy.highlightHover = d.data.zip
+          this.setState(copy)
+    }
 
+    handleMouseoutLine = (d,i) => {
+      let copy = {...this.state}
+          copy.highlightHover = ''
+          this.setState(copy)
+    }
+
+    handleClickLine = (d,i) => {
+      let copy = {...this.state}
+          copy.highlight = d.data.zip
+          this.setState(copy)
+    }
+
+    componentDidMount(){
       window.addEventListener("resize", this.handleResize);
       this.handleResize()
-
     }
 
     handleResize() {
@@ -50,11 +68,13 @@ class App extends Component {
 
 
   render() {
-    const { height, width } = this.state
+    const { height, width, highlight, highlightHover } = this.state
+
+    console.log(highlightHover)
 
     this.formatData(movingAvg)
 
-    //console.log(movingAvg)
+    // console.log(movingAvg)
 
     return (
       <div className="App" >
@@ -68,6 +88,8 @@ class App extends Component {
             chartClass = {'map'}
             width = {400}
             height = {400}
+            highlight = {highlight}
+            highlightHover = {highlightHover}
           />
         </div>
         <div className="linechart-section" ref={parent => (this.container = parent)}>
@@ -76,9 +98,13 @@ class App extends Component {
             chartClass = {'linechart'}
             width = {width}
             height = {height}
-            highlight = {19154}
+            highlight = {highlight}
+            highlightHover = {highlightHover}
             xKey = {'xValue'}
             yKey = {'yValue'}
+            handleMouseoverLine = {this.handleMouseoverLine}
+            handleMouseoutLine = {this.handleMouseoutLine}
+            handleClickLine = {this.handleClickLine}
           />
         </div>
         <div className='credit-section'>
