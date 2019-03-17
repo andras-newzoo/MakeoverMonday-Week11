@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "chroma-js": "^2.0.3",
     "d3-array": "^2.0.3",
     "d3-axis": "^1.0.12",
     "d3-collection": "^1.0.7",

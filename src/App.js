@@ -19,7 +19,9 @@ class App extends Component {
               width: 20000,
               height: undefined,
               highlight: 19154,
-              highlightHover: 19144
+              highlightHover: 19144,
+              colorHighlight: '',
+              color: '',
         }
 
       this.handleResize = this.handleResize.bind(this)
@@ -91,7 +93,6 @@ class App extends Component {
   render() {
     const { height, width, highlight, highlightHover } = this.state
 
-    //console.log(highlightHover)
 
     this.formatData(movingAvg)
 
