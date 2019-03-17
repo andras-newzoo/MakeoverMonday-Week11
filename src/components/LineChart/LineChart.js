@@ -13,6 +13,8 @@ import { voronoi } from 'd3-voronoi'
 import { updateSvg, appendArea } from '../chartFunctions'
 import { createUpdateGridlines, createUpdateAxes } from './functionsLineChart'
 
+import * as chroma from 'chroma-js'
+
 class LineChart extends Component {
 
 
@@ -43,9 +45,10 @@ class LineChart extends Component {
 
     const svg = select(this.node),
           { height, width, margin, chartClass} = this.props,
-          { data, xKey, yKey, highlight, highlightHover} = this.props,
+          { data, dataTotal, xKey, yKey, highlight, highlightHover, colorArray} = this.props,
           { chartWidth, chartHeight } = updateSvg( svg, height, width, margin ),
-          yearArray = [...new Set(data.map(d => d.year))]
+          yearArray = [...new Set(data.map(d => d.year))],
+          colorScale = chroma.scale(colorArray.reverse()).domain(extent(dataTotal, d => d.total))
 
     appendArea( svg, `${chartClass}-chart-area`, margin.left, margin.top)
     appendArea( svg, `${chartClass}-y-axis y-axis`, margin.left, margin.top)
@@ -82,17 +85,24 @@ class LineChart extends Component {
           paths = this.chartArea.selectAll('.line-path').data(lineData),
           voronoiPath = this.chartArea.selectAll('.voronoi').data(this.voronoiData(data).polygons())
 
-    //console.log(lineData)
     paths.enter()
         .append('path')
-        .attr('class', 'line-path')
+        .attr('class',  d => `line-path zip${d.key}`)
         .attr("fill", "none")
-        .attr("stroke", d => +d.key === highlight || +d.key === highlightHover ? 'steelblue' :  '#ccc')
-        .attr("stroke-width", d => +d.key === highlight || +d.key === highlightHover ? 3 : 1)
+        .attr("stroke-width", d => +d.key === highlight || +d.key === highlightHover ? 4 : 1)
+        .attr("stroke-opacity", d => +d.key === highlight || +d.key === highlightHover ? 1 : .2)
         .attr("stroke-linejoin", "round")
         .attr("stroke-linecap", "round")
         .style("mix-blend-mode", "multiply")
         .attr('d', d => linePath(d.values))
+
+
+    //Coloring
+    for (var i = 0; i < dataTotal.length; i ++){
+
+      this.chartArea.select(`.zip${dataTotal[i].zip}`)
+          .attr('stroke', colorScale(dataTotal[i].total))
+    }
 
     voronoiPath.enter()
         .append("path")
@@ -127,8 +137,8 @@ class LineChart extends Component {
 
 
     this.chartArea.selectAll('.line-path')
-              .attr("stroke", d => +d.key === highlight || +d.key === highlightHover ? 'steelblue' :  '#ccc')
-              .attr("stroke-width", d => +d.key === highlight || +d.key === highlightHover ? 3 : 1)
+              .attr("stroke-width", d => +d.key === highlight || +d.key === highlightHover ? 4 : 1)
+              .attr("stroke-opacity", d => +d.key === highlight || +d.key === highlightHover ? 1 : .2)
 
 
   }

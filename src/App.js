@@ -91,8 +91,8 @@ class App extends Component {
 
 
   render() {
-    const { height, width, highlight, highlightHover } = this.state
-
+    const { height, width, highlight, highlightHover } = this.state,
+          colorArray = [  '#3d7eaa', '#4897b5', '#62afbd', '#84c6c5', '#aadcce', '#aae3bf', '#bbe8a8', '#d8e88f', '#ffe47a']
 
     this.formatData(movingAvg)
 
@@ -115,11 +115,13 @@ class App extends Component {
             handleMouseoverMap = {this.handleMouseoverMap}
             handleMouseoutMap = {this.handleMouseoutMap}
             handleClickMap = {this.handleClickMap}
+            colorArray = {colorArray}
           />
         </div>
         <div className="linechart-section" ref={parent => (this.container = parent)}>
           <LineChart
             data = {movingAvg}
+            dataTotal = {total}
             chartClass = {'linechart'}
             width = {width}
             height = {height}
@@ -130,6 +132,7 @@ class App extends Component {
             handleMouseoverLine = {this.handleMouseoverLine}
             handleMouseoutLine = {this.handleMouseoutLine}
             handleClickLine = {this.handleClickLine}
+            colorArray = {colorArray}
           />
         </div>
         <div className='credit-section'>

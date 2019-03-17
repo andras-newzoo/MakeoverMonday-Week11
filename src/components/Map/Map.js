@@ -41,17 +41,9 @@ class Map extends Component {
 
     const svg = select(this.node),
           { height, width, margin, chartClass} = this.props,
-          { data, mapData, highlight, highlightHover } = this.props,
+          { data, mapData, highlight, highlightHover, colorArray } = this.props,
           projection = geoAlbers().scale([70000]).translate([-19580, 3910]),
-          colorScale = chroma.scale([ '#3d7eaa',
-                                      '#4897b5',
-                                      '#62afbd',
-                                      '#84c6c5',
-                                      '#aadcce',
-                                      '#aae3bf',
-                                      '#bbe8a8',
-                                      '#d8e88f',
-                                      '#ffe47a']).domain(extent(data, d => d.total))
+          colorScale = chroma.scale(colorArray.reverse()).domain(extent(data, d => d.total))
 
     // console.log(colorScale.domain())
 
@@ -79,8 +71,7 @@ class Map extends Component {
       //Coloring
       for (var i = 0; i < data.length; i ++){
 
-        svg.select(`.zip${data[i].zip}`)
-            //.attr('class', `${data[i].country} country all-data`)
+        this.chartArea.select(`.zip${data[i].zip}`)
             .attr('fill', colorScale(data[i].total))
       }
 
