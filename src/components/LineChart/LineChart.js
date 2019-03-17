@@ -46,6 +46,7 @@ class LineChart extends Component {
     const svg = select(this.node),
           { height, width, margin, chartClass} = this.props,
           { data, dataTotal, xKey, yKey, highlight, highlightHover, colorArray} = this.props,
+          { lineTooltipHoverMonth, lineTooltipHoverZip, lineTooltipHoverValue } = this.props,
           { chartWidth, chartHeight } = updateSvg( svg, height, width, margin ),
           yearArray = [...new Set(data.map(d => d.year))],
           colorScale = chroma.scale(colorArray.reverse()).domain(extent(dataTotal, d => d.total))
@@ -83,19 +84,19 @@ class LineChart extends Component {
               .x(d => this.xScale(d[xKey]) )
               .y(d => this.yScale(d[yKey]) ),
           paths = this.chartArea.selectAll('.line-path').data(lineData),
-          voronoiPath = this.chartArea.selectAll('.voronoi').data(this.voronoiData(data).polygons())
+          voronoiPath = this.chartArea.selectAll('.voronoi').data(this.voronoiData(data).polygons()),
+          tooltipText = this.chartArea.selectAll('.tooltip-text').data()
 
     paths.enter()
         .append('path')
         .attr('class',  d => `line-path zip${d.key}`)
         .attr("fill", "none")
-        .attr("stroke-width", d => +d.key === highlight || +d.key === highlightHover ? 4 : 1)
-        .attr("stroke-opacity", d => +d.key === highlight || +d.key === highlightHover ? 1 : .2)
+        .attr("stroke-width", d => +d.key === highlight || +d.key === highlightHover ? 5 : .5)
+        .attr("stroke-opacity", d => +d.key === highlight || +d.key === highlightHover ? 1 : .4)
         .attr("stroke-linejoin", "round")
         .attr("stroke-linecap", "round")
         .style("mix-blend-mode", "multiply")
         .attr('d', d => linePath(d.values))
-
 
     //Coloring
     for (var i = 0; i < dataTotal.length; i ++){
@@ -114,6 +115,13 @@ class LineChart extends Component {
         .on('mouseout', this.handleMouseoutLine)
         .on('click', this.handleClickLine)
 
+    svg.append('text')
+        .attr( 'class', 'tooltip-text' )
+        .text(`Zip Code: ${lineTooltipHoverZip} | Month: ${lineTooltipHoverMonth} | Rolling Avg. of Document Transiactions: ${(lineTooltipHoverValue)}`)
+        .attr('x', 0)
+        .attr('y', 10)
+        .attr('text-anchor', 'start')
+
     appendArea( this.chartArea, `gridline-one`, 0, chartHeight)
     appendArea( this.chartArea, `gridline-two`, 0, chartHeight)
 
@@ -128,18 +136,20 @@ class LineChart extends Component {
 
   updateDims(){
 
-
   }
 
   updateData(){
 
-    const { highlight, highlightHover } = this.props
-
+    const  svg = select(this.node),
+          { highlight, highlightHover } = this.props,
+          { lineTooltipHoverMonth, lineTooltipHoverZip, lineTooltipHoverValue } = this.props
 
     this.chartArea.selectAll('.line-path')
-              .attr("stroke-width", d => +d.key === highlight || +d.key === highlightHover ? 4 : 1)
-              .attr("stroke-opacity", d => +d.key === highlight || +d.key === highlightHover ? 1 : .2)
+              .attr("stroke-width", d => +d.key === highlight || +d.key === highlightHover ? 5 : .5)
+              .attr("stroke-opacity", d => +d.key === highlight || +d.key === highlightHover ? 1 : .4)
 
+    svg.select('.tooltip-text')
+              .text(`Zip Code: ${lineTooltipHoverZip} | Month: ${lineTooltipHoverMonth} | Rolling Avg. of Document Transiactions: ${format(',.0f')(lineTooltipHoverValue)}`)
 
   }
 
@@ -153,7 +163,7 @@ class LineChart extends Component {
 
 LineChart.defaultProps = {
   margin: {
-    top: 10,
+    top: 25,
     right: 10,
     bottom: 25,
     left: 30

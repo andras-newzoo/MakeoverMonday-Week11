@@ -19,12 +19,37 @@ font-style: normal;
 
 * {
     font-family: futura-pt, sans-serif ;
-    zoom: 100%
+    zoom: 100%;
+    color: #333;
 }
+
+text {
+  fill: #333;
+}
+
+.item::before {
+  color: #333 !important;
+}
+
+
 
 #root {
   width: 100vw;
   height: 100vh;
+}
+
+h1 {
+  font-family: futura-pt-condensed, sans-serif !important;
+  font-size: 4rem !important;
+  line-height: 40px !important;
+  text-transform: uppercase;
+}
+
+h2 {
+  font-family: futura-pt, sans-serif !important;
+  font-weight: 300;
+  font-size: 1.5rem !important;
+  line-height: 0px !important;
 }
 
 .App {
@@ -42,6 +67,18 @@ font-style: normal;
   left: 0;
 }
 
+#paragraph {
+  position: absolute;
+  width: 60%;
+  height: 25%;
+  top: 100px;
+}
+
+#paragraph p {
+ font-size: 14px !important;
+}
+
+
 .map-section {
   position: absolute;
   width: 400px;
@@ -54,15 +91,15 @@ font-style: normal;
 .linechart-section {
   position: absolute;
   width: 100%;
-  height: 60%;
-  top: 35%;
+  height: 70%;
+  top: 25%;
   left: 0;
 }
 
 .credit-section {
   position: absolute;
   width: 100%;
-  height: 3%;
+  height: 5%;
   top: 95%;
   left: 0;
   text-align: center;

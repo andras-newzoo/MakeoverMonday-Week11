@@ -4,6 +4,7 @@ import './Map.css'
 import { select } from 'd3-selection'
 import { geoPath, geoAlbers } from 'd3-geo'
 import { extent } from 'd3-array'
+import { format } from 'd3-format'
 
 import { updateSvg, appendArea } from '../chartFunctions'
 
@@ -11,8 +12,8 @@ import * as chroma from 'chroma-js'
 
 class Map extends Component {
 
-  handleMouseoverMap = d => {
-    this.props.handleMouseoverMap(d)
+  handleMouseoverMap = (d, i, n) => {
+    this.props.handleMouseoverMap(d, i, n)
   }
 
   handleMouseoutMap = d => {
@@ -68,13 +69,27 @@ class Map extends Component {
           .on('mouseout', this.handleMouseoutMap)
           .on('click', this.handleClickMap)
 
-      //Coloring
       for (var i = 0; i < data.length; i ++){
 
         this.chartArea.select(`.zip${data[i].zip}`)
             .attr('fill', colorScale(data[i].total))
-      }
 
+        this.chartArea.append('text')
+            .attr('class', `map-tooltip zip${data[i].zip}-tooltip`)
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('opacity', d => highlightHover === data[i].zip ? 1 : 0)
+            .attr('fill', 'black')
+            .text(d => `Total No. of Document Transactions: ${format(',.0f')(+data[i].total)}`)
+
+        this.chartArea.append('text')
+            .attr('class', `map-tooltip zip${data[i].zip}-tooltip`)
+            .attr('x', 0)
+            .attr('y', 20)
+            .attr('opacity', d => highlightHover === data[i].zip ? 1 : 0)
+            .attr('fill', 'black')
+            .text(d => `Zip Code: ${format('d')(data[i].zip)}`)
+      }
 
   }
 
@@ -85,6 +100,8 @@ class Map extends Component {
       this.chartArea.selectAll('.map-path')
             .attr('stroke', (d,i) => +mapData.features[i].properties['CODE'] === highlight ||  +mapData.features[i].properties['CODE'] === highlightHover ? '#333' :  'none')
 
+      this.chartArea.selectAll('.map-tooltip').attr('opacity', 0 )
+      this.chartArea.selectAll(`.zip${highlightHover}-tooltip`).attr('opacity', 1)
   }
 
 

@@ -6,6 +6,7 @@ import total from './data/total.json'
 import movingAvg from './data/movingAvg.json'
 
 import { timeParse, timeFormat } from 'd3-time-format';
+import { select } from 'd3-selection';
 
 import Map from './components/Map/Map'
 import LineChart from './components/LineChart/LineChart'
@@ -18,10 +19,18 @@ class App extends Component {
         this.state = {
               width: 20000,
               height: undefined,
-              highlight: 19154,
-              highlightHover: 19144,
-              colorHighlight: '',
-              color: '',
+
+              highlight: 19111,
+              highlightHover: '-',
+
+              lineTooltipHoverMonth: '----',
+              lineTooltipHoverZip: '----',
+              lineTooltipHoverValue: '0',
+
+              mapTooltipHoverZip: '----',
+              mapTooltipHoverValue: '0'
+
+
         }
 
       this.handleResize = this.handleResize.bind(this)
@@ -30,12 +39,20 @@ class App extends Component {
     handleMouseoverLine = d => {
       let copy = {...this.state}
           copy.highlightHover = d.data.zip
+          copy.lineTooltipHoverMonth = d.data.date
+          copy.lineTooltipHoverZip = d.data.zip
+          copy.lineTooltipHoverValue = d.data.movingAvg
+          copy.lineTooltipHoverFilter = d.data.month
+
           this.setState(copy)
     }
 
     handleMouseoutLine = d => {
       let copy = {...this.state}
           copy.highlightHover = ''
+          copy.lineTooltipHoverMonth = '----'
+          copy.lineTooltipHoverZip = '----'
+          copy.lineTooltipHoverValue = '0'
           this.setState(copy)
     }
 
@@ -45,16 +62,17 @@ class App extends Component {
           this.setState(copy)
     }
 
-    handleMouseoverMap = d => {
+    handleMouseoverMap = (d, i, n) => {
       let copy = {...this.state}
       copy.highlightHover = d.properties['CODE']
       this.setState(copy)
-      console.log(this.state)
     }
 
     handleMouseoutMap = d => {
       let copy = {...this.state}
       copy.highlightHover = ''
+      copy.mapTooltipHoverZip = '----'
+      copy.mapTooltipHoverValue = '0'
       this.setState(copy)
     }
 
@@ -62,8 +80,6 @@ class App extends Component {
       let copy = {...this.state}
           copy.highlight = d.properties['CODE']
           this.setState(copy)
-
-      console.log(this.state)
     }
 
     componentDidMount(){
@@ -92,16 +108,20 @@ class App extends Component {
 
   render() {
     const { height, width, highlight, highlightHover } = this.state,
+          { lineTooltipHoverMonth, lineTooltipHoverZip, lineTooltipHoverValue, mapTooltipHoverZip, mapTooltipHoverValue } = this.state,
           colorArray = [  '#3d7eaa', '#4897b5', '#62afbd', '#84c6c5', '#aadcce', '#aae3bf', '#bbe8a8', '#d8e88f', '#ffe47a']
 
     this.formatData(movingAvg)
 
-    // console.log(movingAvg)
-
     return (
       <div className="App" >
         <div className="header-section">
-
+          <h1>Philadelhia Real Estate Market</h1>
+          <h2>Number of Document Transactions for Every ZIP Code (rolling 12-month average)</h2>
+            <div id="paragraph">
+              <p>This visualization is looking at the total number of Real Estate Tax documents in Philadelhia from 2000 to 2018.
+                  It includes every type of document registered like Mortgage, Deed, Satisfaction, etc.</p>
+            </div>
         </div>
         <div className="map-section">
           <Map
@@ -116,6 +136,8 @@ class App extends Component {
             handleMouseoutMap = {this.handleMouseoutMap}
             handleClickMap = {this.handleClickMap}
             colorArray = {colorArray}
+            mapTooltipHoverZip = {mapTooltipHoverZip}
+            mapTooltipHoverValue = {mapTooltipHoverValue}
           />
         </div>
         <div className="linechart-section" ref={parent => (this.container = parent)}>
@@ -133,14 +155,17 @@ class App extends Component {
             handleMouseoutLine = {this.handleMouseoutLine}
             handleClickLine = {this.handleClickLine}
             colorArray = {colorArray}
+            lineTooltipHoverMonth = {lineTooltipHoverMonth}
+            lineTooltipHoverZip = {lineTooltipHoverZip}
+            lineTooltipHoverValue = {lineTooltipHoverValue}
           />
         </div>
         <div className='credit-section'>
           <List bulleted horizontal link>
               <List.Item href='https://twitter.com/AndSzesztai' target='_blank' as='a'>Built and somewhat redesigned by: Andras Szesztai</List.Item>
-              <List.Item href='' target='_blank' as='a'>A</List.Item>
+              <List.Item href='https://public.tableau.com/profile/dorian.barosan#!/vizhome/PhiladelphiaRealEstateMarket/Dashboard1' target='_blank' as='a'>Original design, text and calculations: Dorian Banutoiu</List.Item>
               <List.Item href='https://www.makeovermonday.co.uk/' target='_blank' as='a'>#MakeoverMonday Week 11 2019</List.Item>
-              <List.Item href='https://data.world/makeovermonday/2019w11' target='_blank' as='a'>A</List.Item>
+              <List.Item href='https://data.world/makeovermonday/2019w11' target='_blank' as='a'>Data and Map: OpenDataPhilly</List.Item>
           </List>
         </div>
       </div>
