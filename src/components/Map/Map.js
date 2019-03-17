@@ -9,12 +9,22 @@ import { updateSvg, appendArea } from '../chartFunctions'
 
 class Map extends Component {
 
+  handleMouseoverMap = d => {
+    this.props.handleMouseoverMap(d)
+  }
+
+  handleMouseoutMap = d => {
+    this.props.handleMouseoutMap(d)
+  }
+
+  handleClickMap = d => {
+    this.props.handleClickMap(d)
+  }
+
   componentDidMount(){
     const { mapData, data, width, height } = this.props
 
     this.initVis()
-
-    console.log(mapData)
 
   }
 
@@ -40,6 +50,7 @@ class Map extends Component {
 
     const  mapPath = geoPath().projection(projection)
 
+    console.log(mapData.features)
     this.chartArea.selectAll('.map-path')
           .data(mapData.features)
           .enter()
@@ -48,8 +59,10 @@ class Map extends Component {
           .attr('d', mapPath)
           .attr('fill', '#ccc')
           .attr('stroke-width', 1)
-          .attr('stroke', (d,i) => +mapData.features[i].properties['CODE'] === highlight ||  +mapData.features[i].properties['CODE'] === highlightHover ? 'steelblue' :  'none')
-          .on('mouseover', (d,i) => console.log(mapData.features[i].properties['CODE']))
+          .attr('stroke', d => +d.properties['CODE'] === highlight ||  +d.properties['CODE'] === highlightHover ? 'steelblue' :  'none')
+          .on('mouseover', this.handleMouseoverMap)
+          .on('mouseout', this.handleMouseoutMap)
+          .on('click', this.handleClickMap)
 
   }
 

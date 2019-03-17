@@ -23,20 +23,15 @@ font-style: normal;
 }
 
 #root {
-  position: relative;
   width: 100vw;
   height: 100vh;
 }
 
 .App {
-  position: absolute;
-  width: 90vw;
-  min-width: 1200px;
-  height: 90vh;
-  min-height: 700px;
-  margin: 0 auto;
-  top: 5%;
-  left: 5%;
+  position: relative;
+  width: 1200px;
+  height: 700px;
+  margin: 5vh auto 0 auto;
 }
 
 .header-section {

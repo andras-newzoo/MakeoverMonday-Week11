@@ -16,15 +16,15 @@ import { createUpdateGridlines, createUpdateAxes } from './functionsLineChart'
 class LineChart extends Component {
 
 
-  handleMouseoverLine = (d,i) => {
+  handleMouseoverLine = d => {
     this.props.handleMouseoverLine(d)
   }
 
-  handleMouseoutLine = (d,i) => {
+  handleMouseoutLine = d => {
     this.props.handleMouseoutLine(d)
   }
 
-  handleClickLine = (d, i) => {
+  handleClickLine = d => {
     this.props.handleClickLine(d)
   }
 

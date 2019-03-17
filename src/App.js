@@ -25,22 +25,43 @@ class App extends Component {
       this.handleResize = this.handleResize.bind(this)
     }
 
-    handleMouseoverLine = (d,i) => {
+    handleMouseoverLine = d => {
       let copy = {...this.state}
           copy.highlightHover = d.data.zip
           this.setState(copy)
     }
 
-    handleMouseoutLine = (d,i) => {
+    handleMouseoutLine = d => {
       let copy = {...this.state}
           copy.highlightHover = ''
           this.setState(copy)
     }
 
-    handleClickLine = (d,i) => {
+    handleClickLine = d => {
       let copy = {...this.state}
           copy.highlight = d.data.zip
           this.setState(copy)
+    }
+
+    handleMouseoverMap = d => {
+      let copy = {...this.state}
+      copy.highlightHover = d.properties['CODE']
+      this.setState(copy)
+      console.log(this.state)
+    }
+
+    handleMouseoutMap = d => {
+      let copy = {...this.state}
+      copy.highlightHover = ''
+      this.setState(copy)
+    }
+
+    handleClickMap = d => {
+      let copy = {...this.state}
+          copy.highlight = d.properties['CODE']
+          this.setState(copy)
+
+      console.log(this.state)
     }
 
     componentDidMount(){
@@ -70,7 +91,7 @@ class App extends Component {
   render() {
     const { height, width, highlight, highlightHover } = this.state
 
-    console.log(highlightHover)
+    //console.log(highlightHover)
 
     this.formatData(movingAvg)
 
@@ -88,8 +109,11 @@ class App extends Component {
             chartClass = {'map'}
             width = {400}
             height = {400}
-            highlight = {highlight}
-            highlightHover = {highlightHover}
+            highlight = {+highlight}
+            highlightHover = {+highlightHover}
+            handleMouseoverMap = {this.handleMouseoverMap}
+            handleMouseoutMap = {this.handleMouseoutMap}
+            handleClickMap = {this.handleClickMap}
           />
         </div>
         <div className="linechart-section" ref={parent => (this.container = parent)}>
@@ -98,8 +122,8 @@ class App extends Component {
             chartClass = {'linechart'}
             width = {width}
             height = {height}
-            highlight = {highlight}
-            highlightHover = {highlightHover}
+            highlight = {+highlight}
+            highlightHover = {+highlightHover}
             xKey = {'xValue'}
             yKey = {'yValue'}
             handleMouseoverLine = {this.handleMouseoverLine}
