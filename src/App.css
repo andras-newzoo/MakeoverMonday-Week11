@@ -31,17 +31,22 @@ text {
   color: #333 !important;
 }
 
-
-
 #root {
   width: 100vw;
   height: 100vh;
 }
 
+h1,
+h2,
+p,
+text {
+    pointer-events: none;
+}
+
 h1 {
   font-family: futura-pt-condensed, sans-serif !important;
   font-size: 4rem !important;
-  line-height: 40px !important;
+  line-height: 39px !important;
   text-transform: uppercase;
 }
 
@@ -49,7 +54,7 @@ h2 {
   font-family: futura-pt, sans-serif !important;
   font-weight: 300;
   font-size: 1.5rem !important;
-  line-height: 0px !important;
+  line-height: 0 !important;
 }
 
 .App {
@@ -72,6 +77,12 @@ h2 {
   width: 60%;
   height: 25%;
   top: 100px;
+}
+
+#how-to {
+  position: absolute;
+  bottom: -11px;
+  right: 34.3%;
 }
 
 #paragraph p {

@@ -98,7 +98,6 @@ class LineChart extends Component {
         .style("mix-blend-mode", "multiply")
         .attr('d', d => linePath(d.values))
 
-    //Coloring
     for (var i = 0; i < dataTotal.length; i ++){
 
       this.chartArea.select(`.zip${dataTotal[i].zip}`)
@@ -131,11 +130,6 @@ class LineChart extends Component {
     createUpdateGridlines(this.gridlineOne,  this.gridlineOneCall,  '#fff', 6)
     createUpdateGridlines(this.gridlineTwo,  this.gridlineTwoCall,  '#ccc', 1)
 
-    //console.log(lineData)
-  }
-
-  updateDims(){
-
   }
 
   updateData(){
@@ -149,7 +143,7 @@ class LineChart extends Component {
               .attr("stroke-opacity", d => +d.key === highlight || +d.key === highlightHover ? 1 : .4)
 
     svg.select('.tooltip-text')
-              .text(`Zip Code: ${lineTooltipHoverZip} | Month: ${lineTooltipHoverMonth} | Rolling Avg. of Document Transiactions: ${format(',.0f')(lineTooltipHoverValue)}`)
+              .text(`ZIP Code: ${lineTooltipHoverZip} | Month: ${lineTooltipHoverMonth} | Rolling Avg. of Document Transiactions: ${format(',.0f')(lineTooltipHoverValue)}`)
 
   }
 
@@ -167,10 +161,6 @@ LineChart.defaultProps = {
     right: 10,
     bottom: 25,
     left: 30
-  },
-  transition: {
-    long: 1000,
-    short: 300,
   }
 }
 

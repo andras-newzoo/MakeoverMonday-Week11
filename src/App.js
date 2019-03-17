@@ -6,12 +6,11 @@ import total from './data/total.json'
 import movingAvg from './data/movingAvg.json'
 
 import { timeParse, timeFormat } from 'd3-time-format';
-import { select } from 'd3-selection';
 
 import Map from './components/Map/Map'
 import LineChart from './components/LineChart/LineChart'
 
-import { List } from 'semantic-ui-react'
+import { List, Button, Popup } from 'semantic-ui-react'
 
 class App extends Component {
     constructor(props){
@@ -26,10 +25,6 @@ class App extends Component {
               lineTooltipHoverMonth: '----',
               lineTooltipHoverZip: '----',
               lineTooltipHoverValue: '0',
-
-              mapTooltipHoverZip: '----',
-              mapTooltipHoverValue: '0'
-
 
         }
 
@@ -71,8 +66,6 @@ class App extends Component {
     handleMouseoutMap = d => {
       let copy = {...this.state}
       copy.highlightHover = ''
-      copy.mapTooltipHoverZip = '----'
-      copy.mapTooltipHoverValue = '0'
       this.setState(copy)
     }
 
@@ -108,7 +101,7 @@ class App extends Component {
 
   render() {
     const { height, width, highlight, highlightHover } = this.state,
-          { lineTooltipHoverMonth, lineTooltipHoverZip, lineTooltipHoverValue, mapTooltipHoverZip, mapTooltipHoverValue } = this.state,
+          { lineTooltipHoverMonth, lineTooltipHoverZip, lineTooltipHoverValue } = this.state,
           colorArray = [  '#3d7eaa', '#4897b5', '#62afbd', '#84c6c5', '#aadcce', '#aae3bf', '#bbe8a8', '#d8e88f', '#ffe47a']
 
     this.formatData(movingAvg)
@@ -122,6 +115,11 @@ class App extends Component {
               <p>This visualization is looking at the total number of Real Estate Tax documents in Philadelhia from 2000 to 2018.
                   It includes every type of document registered like Mortgage, Deed, Satisfaction, etc.</p>
             </div>
+          <div id='how-to'>
+            <Popup trigger={<Button icon='question circle' />} content='
+                Hover over the map or the lines to highlight a certain ZIP code, and click on it to keep it highlighted!
+                The darker blue the color, means the more documents transactions in total, while yellow is the least number of transactions over the period.' />
+          </div>
         </div>
         <div className="map-section">
           <Map
@@ -136,8 +134,6 @@ class App extends Component {
             handleMouseoutMap = {this.handleMouseoutMap}
             handleClickMap = {this.handleClickMap}
             colorArray = {colorArray}
-            mapTooltipHoverZip = {mapTooltipHoverZip}
-            mapTooltipHoverValue = {mapTooltipHoverValue}
           />
         </div>
         <div className="linechart-section" ref={parent => (this.container = parent)}>

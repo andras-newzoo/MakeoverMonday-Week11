@@ -46,8 +46,6 @@ class Map extends Component {
           projection = geoAlbers().scale([70000]).translate([-19580, 3910]),
           colorScale = chroma.scale(colorArray.reverse()).domain(extent(data, d => d.total))
 
-    // console.log(colorScale.domain())
-
     updateSvg( svg, height, width, margin )
     appendArea(svg, `${chartClass}-chart-area`, margin.left, margin.top)
 
@@ -55,7 +53,6 @@ class Map extends Component {
 
     const  mapPath = geoPath().projection(projection)
 
-    //console.log(mapData.features)
     this.chartArea.selectAll('.map-path')
           .data(mapData.features)
           .enter()
@@ -88,7 +85,7 @@ class Map extends Component {
             .attr('y', 20)
             .attr('opacity', d => highlightHover === data[i].zip ? 1 : 0)
             .attr('fill', 'black')
-            .text(d => `Zip Code: ${format('d')(data[i].zip)}`)
+            .text(d => `ZIP Code: ${format('d')(data[i].zip)}`)
       }
 
   }
@@ -120,10 +117,6 @@ Map.defaultProps = {
     right: 10,
     bottom: 10,
     left: 10
-  },
-  transition: {
-    long: 1000,
-    short: 300,
   }
 }
 
