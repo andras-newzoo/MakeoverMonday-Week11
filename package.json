@@ -2,6 +2,7 @@
   "name": "makeovermonday-week11",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://boringbarchart.com/philadelphia-real-estate",
   "dependencies": {
     "chroma-js": "^2.0.3",
     "d3-array": "^2.0.3",

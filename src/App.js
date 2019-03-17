@@ -161,7 +161,7 @@ class App extends Component {
               <List.Item href='https://twitter.com/AndSzesztai' target='_blank' as='a'>Built and somewhat redesigned by: Andras Szesztai</List.Item>
               <List.Item href='https://public.tableau.com/profile/dorian.barosan#!/vizhome/PhiladelphiaRealEstateMarket/Dashboard1' target='_blank' as='a'>Original design, text and calculations: Dorian Banutoiu</List.Item>
               <List.Item href='https://www.makeovermonday.co.uk/' target='_blank' as='a'>#MakeoverMonday Week 11 2019</List.Item>
-              <List.Item href='https://data.world/makeovermonday/2019w11' target='_blank' as='a'>Data and Map: OpenDataPhilly</List.Item>
+              <List.Item href='https://data.world/makeovermonday/2019week11' target='_blank' as='a'>Data and Map: OpenDataPhilly</List.Item>
           </List>
         </div>
       </div>
